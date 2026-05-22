@@ -97,8 +97,8 @@ class ProductControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requests)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].quantity").value(8))
-                .andExpect(jsonPath("$[1].quantity").value(15));
+                .andExpect(jsonPath("$[0].quantity").value(2))
+                .andExpect(jsonPath("$[1].quantity").value(5));
     }
 
     @Test

@@ -56,8 +56,7 @@ public class ProductService {
             productRepository.save(product);
 
             ProductResponseDto response = productMapper.toResponseDto(product);
-            // OVERRIDE: Skicka tillbaka det antal som faktiskt köptes (för att hjälpa Axel)
-            response.setQuantity(request.getQuantity()); 
+            response.setQuantity(request.getQuantity());
             return response;
         }).collect(Collectors.toList());
     }

@@ -46,11 +46,11 @@ public class ProductService {
         return requests.stream().map(request -> {
             Product product = findProductOrThrow(request.getProductId());
 
-            if (product.getStock() < request.getQuantity()) {
+            if (product.getQuantity() < request.getQuantity()) {
                 throw new InsufficientStockException("Insufficient stock for product: " + product.getName());
             }
 
-            product.setStock(product.getStock() - request.getQuantity());
+            product.setQuantity(product.getQuantity() - request.getQuantity());
             Product updatedProduct = productRepository.save(product);
             return mapToResponseDto(updatedProduct);
         }).collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class ProductService {
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .price(dto.getPrice())
-                .stock(dto.getStock())
+                .quantity(dto.getQuantity())
                 .build();
     }
 
@@ -76,7 +76,7 @@ public class ProductService {
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
-                .stock(product.getStock())
+                .quantity(product.getQuantity())
                 .build();
     }
 }

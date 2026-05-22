@@ -9,6 +9,7 @@ import se.iths.fabian.productservicemajprojekt.dto.ProductStockRequest;
 import se.iths.fabian.productservicemajprojekt.entity.Product;
 import se.iths.fabian.productservicemajprojekt.exception.InsufficientStockException;
 import se.iths.fabian.productservicemajprojekt.exception.ProductNotFoundException;
+import se.iths.fabian.productservicemajprojekt.mapper.ProductMapper;
 import se.iths.fabian.productservicemajprojekt.repository.ProductRepository;
 
 import java.util.List;
@@ -19,21 +20,22 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     public ProductResponseDto createProduct(ProductRequestDto requestDto) {
-        Product product = mapToEntity(requestDto);
+        Product product = productMapper.toEntity(requestDto);
         Product savedProduct = productRepository.save(product);
-        return mapToResponseDto(savedProduct);
+        return productMapper.toResponseDto(savedProduct);
     }
 
     public List<ProductResponseDto> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(this::mapToResponseDto)
+                .map(productMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
     public ProductResponseDto getProductById(Long id) {
-        return mapToResponseDto(findProductOrThrow(id));
+        return productMapper.toResponseDto(findProductOrThrow(id));
     }
 
     public void deleteProduct(Long id) {
@@ -51,32 +53,16 @@ public class ProductService {
             }
 
             product.setQuantity(product.getQuantity() - request.getQuantity());
-            Product updatedProduct = productRepository.save(product);
-            return mapToResponseDto(updatedProduct);
+            productRepository.save(product);
+
+            ProductResponseDto response = productMapper.toResponseDto(product);
+            response.setQuantity(request.getQuantity());
+            return response;
         }).collect(Collectors.toList());
     }
 
     private Product findProductOrThrow(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
-    }
-
-    private Product mapToEntity(ProductRequestDto dto) {
-        return Product.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .price(dto.getPrice())
-                .quantity(dto.getQuantity())
-                .build();
-    }
-
-    private ProductResponseDto mapToResponseDto(Product product) {
-        return ProductResponseDto.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .quantity(product.getQuantity())
-                .build();
     }
 }

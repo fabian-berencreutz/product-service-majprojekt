@@ -128,4 +128,17 @@ class ProductControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].quantity").value(2));
     }
+
+    @Test
+    void decreaseStock_withInsufficientStock_shouldReturnBadRequest() throws Exception {
+        Product p1 = productRepository.save(new Product(null, "P1", "D1", new BigDecimal("100"), 5));
+
+        List<ProductStockRequest> requests = List.of(new ProductStockRequest(p1.getId(), 10));
+
+        mockMvc.perform(post("/products/stock/decrease")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_USER")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requests)))
+                .andExpect(status().isBadRequest());
+    }
 }

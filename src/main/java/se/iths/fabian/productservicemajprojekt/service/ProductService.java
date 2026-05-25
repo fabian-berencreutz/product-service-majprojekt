@@ -48,11 +48,11 @@ public class ProductService {
         return requests.stream().map(request -> {
             Product product = findProductOrThrow(request.getProductId());
 
-            if (product.getQuantity() < request.getQuantity()) {
+            if (product.getStock() < request.getQuantity()) {
                 throw new InsufficientStockException("Insufficient stock for product: " + product.getName());
             }
 
-            product.setQuantity(product.getQuantity() - request.getQuantity());
+            product.setStock(product.getStock() - request.getQuantity());
             productRepository.save(product);
 
             ProductResponseDto response = productMapper.toResponseDto(product);

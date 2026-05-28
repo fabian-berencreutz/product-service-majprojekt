@@ -39,6 +39,10 @@ public class SecurityConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
+                .info(new io.swagger.v3.oas.models.info.Info()
+                        .title("Product Service API")
+                        .version("1.0")
+                        .description("API for managing products in the webshop. Includes functionality for stock management and role-based access control."))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",

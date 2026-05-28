@@ -39,11 +39,11 @@ public class SecurityConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList("mySecurity"))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("mySecurity",
+                        .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
-                                        .name("mySecurity")
+                                        .name("bearerAuth")
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")));

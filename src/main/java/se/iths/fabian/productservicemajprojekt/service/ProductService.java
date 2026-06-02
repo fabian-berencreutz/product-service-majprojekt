@@ -1,14 +1,15 @@
 package se.iths.fabian.productservicemajprojekt.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import se.iths.fabian.productservicemajprojekt.dto.ProductRequestDto;
 import se.iths.fabian.productservicemajprojekt.dto.ProductResponseDto;
 import se.iths.fabian.productservicemajprojekt.dto.ProductStockRequest;
 import se.iths.fabian.productservicemajprojekt.entity.Product;
 import se.iths.fabian.productservicemajprojekt.exception.InsufficientStockException;
-import se.iths.fabian.productservicemajprojekt.exception.ProductNotFoundException;
 import se.iths.fabian.productservicemajprojekt.mapper.ProductMapper;
 import se.iths.fabian.productservicemajprojekt.repository.ProductRepository;
 
@@ -63,6 +64,6 @@ public class ProductService {
 
     private Product findProductOrThrow(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product with id " + id + "not found."));
     }
 }

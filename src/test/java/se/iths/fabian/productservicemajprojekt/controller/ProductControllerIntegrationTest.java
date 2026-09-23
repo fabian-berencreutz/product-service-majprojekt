@@ -141,4 +141,30 @@ class ProductControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(requests)))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void cors_withAllowedOrigins_shouldIncludeCorsHeaders() throws Exception {
+        List<String> allowedOrigins = List.of(
+                "http://localhost:5173",
+                "http://localhost:5174",
+                "http://localhost:5175"
+        );
+
+        for (String origin : allowedOrigins) {
+            mockMvc.perform(options("/products")
+                            .header("Origin", origin)
+                            .header("Access-Control-Request-Method", "GET"))
+                    .andExpect(status().isOk())
+                    .andExpect(header().string("Access-Control-Allow-Origin", origin));
+        }
+    }
+
+    @Test
+    void cors_withDisallowedOrigin_shouldNotAllowOrigin() throws Exception {
+        mockMvc.perform(options("/products")
+                        .header("Origin", "http://unallowed-domain.com")
+                        .header("Access-Control-Request-Method", "GET"))
+                .andExpect(header().doesNotExist("Access-Control-Allow-Origin"));
+    }
 }
+

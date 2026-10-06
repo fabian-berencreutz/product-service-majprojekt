@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import se.iths.fabian.productservicemajprojekt.entity.Category;
 
 import java.math.BigDecimal;
 
@@ -16,6 +17,6 @@ public class ProductRequestDto {
     private String description;
     private BigDecimal price;
     private int quantity;
-    private String category;
+    private Category category;
     private String imageUrl;
 }

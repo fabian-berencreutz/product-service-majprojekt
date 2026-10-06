@@ -13,6 +13,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.iths.fabian.productservicemajprojekt.dto.ProductRequestDto;
 import se.iths.fabian.productservicemajprojekt.dto.ProductStockRequest;
+import se.iths.fabian.productservicemajprojekt.entity.Category;
 import se.iths.fabian.productservicemajprojekt.entity.Product;
 import se.iths.fabian.productservicemajprojekt.repository.ProductRepository;
 
@@ -51,7 +52,7 @@ class ProductControllerIntegrationTest {
                 .description("Powerful gaming laptop")
                 .price(new BigDecimal("15000.00"))
                 .quantity(5)
-                .category("Elektronik")
+                .category(Category.ELECTRONICS)
                 .imageUrl("https://example.com/laptop.jpg")
                 .build();
 
@@ -61,7 +62,7 @@ class ProductControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Laptop"))
-                .andExpect(jsonPath("$.category").value("Elektronik"))
+                .andExpect(jsonPath("$.category").value("ELECTRONICS"))
                 .andExpect(jsonPath("$.imageUrl").value("https://example.com/laptop.jpg"));
     }
 
@@ -70,7 +71,7 @@ class ProductControllerIntegrationTest {
         ProductRequestDto request = ProductRequestDto.builder()
                 .name("Laptop")
                 .price(new BigDecimal("15000"))
-                .category("Elektronik")
+                .category(Category.ELECTRONICS)
                 .imageUrl("https://example.com/laptop.jpg")
                 .build();
 
@@ -88,7 +89,7 @@ class ProductControllerIntegrationTest {
                 .description("Wireless")
                 .price(new BigDecimal("500"))
                 .stock(10)
-                .category("Elektronik")
+                .category(Category.ELECTRONICS)
                 .imageUrl("https://example.com/mouse.jpg")
                 .build());
 
@@ -96,7 +97,7 @@ class ProductControllerIntegrationTest {
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].category").value("Elektronik"))
+                .andExpect(jsonPath("$[0].category").value("ELECTRONICS"))
                 .andExpect(jsonPath("$[0].imageUrl").value("https://example.com/mouse.jpg"));
     }
 
@@ -107,7 +108,7 @@ class ProductControllerIntegrationTest {
                 .description("4K")
                 .price(new BigDecimal("4000"))
                 .stock(3)
-                .category("Elektronik")
+                .category(Category.ELECTRONICS)
                 .imageUrl("https://example.com/screen.jpg")
                 .build());
 
@@ -115,7 +116,7 @@ class ProductControllerIntegrationTest {
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Screen"))
-                .andExpect(jsonPath("$.category").value("Elektronik"))
+                .andExpect(jsonPath("$.category").value("ELECTRONICS"))
                 .andExpect(jsonPath("$.imageUrl").value("https://example.com/screen.jpg"));
     }
 

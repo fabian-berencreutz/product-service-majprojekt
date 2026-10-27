@@ -1,5 +1,6 @@
 package se.iths.fabian.productservicemajprojekt.config;
 
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -34,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/products/stock/decrease").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/products/stock/increase").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

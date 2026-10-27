@@ -42,5 +42,13 @@ public class ProductController {
     @PostMapping("/stock/decrease")
     public List<ProductResponseDto> decreaseStock(@RequestBody List<ProductStockRequest> requests) {
         return productService.decreaseStock(requests);
+
+
     }
+
+@PostMapping("/stock/increase")
+public List<ProductResponseDto> increaseStock(
+        @RequestBody List<ProductStockRequest> requests) {
+    return productService.increaseStock(requests);
+  }
 }

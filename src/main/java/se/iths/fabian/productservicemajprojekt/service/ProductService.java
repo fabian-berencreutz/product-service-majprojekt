@@ -60,6 +60,21 @@ public class ProductService {
             return response;
         }).collect(Collectors.toList());
     }
+    @Transactional
+    public List<ProductResponseDto> increaseStock(List<ProductStockRequest> requests) {
+        return requests.stream().map(request -> {
+            if (request.getQuantity() <= 0) {
+                throw new IllegalArgumentException("Quantity must be greater than zero");
+            }
+
+            Product product = findProductOrThrow(request.getProductId());
+
+            product.setStock(product.getStock() + request.getQuantity());
+            productRepository.save(product);
+
+            return productMapper.toResponseDto(product);
+        }).collect(Collectors.toList());
+    }
 
     private Product findProductOrThrow(Long id) {
         return productRepository.findById(id)

@@ -8,6 +8,9 @@ import se.iths.fabian.productservicemajprojekt.entity.Category;
 
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object (DTO) som representerar produktdata som skickas som svar till klienten.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

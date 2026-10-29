@@ -22,10 +22,21 @@ import org.springframework.security.config.Customizer;
 
 import java.util.List;
 
+/**
+ * Säkerhetskonfiguration för Product Service.
+ * Hanterar endpoint-behörigheter, OAuth2 Resource Server med JWT-validering, CORS-regler och OpenAPI/Swagger-dokumentation.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    /**
+     * Konfigurerar säkerhetsfilterkedjan och definierar åtkomstregler för HTTP-endpoints baserat på användarroller (USER och ADMIN).
+     *
+     * @param http {@link HttpSecurity} som används för att bygga säkerhetsfiltren
+     * @return en konfigurerad {@link SecurityFilterChain}
+     * @throws Exception om ett fel uppstår under konfigurationen
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -47,6 +58,12 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Konfigurerar CORS (Cross-Origin Resource Sharing) för att tillåta anrop från specifika frontend-klienter.
+     *
+     * @param allowedOrigins lista med godkända URL-ursprung som injiceras från applikationsegenskaperna
+     * @return en {@link CorsConfigurationSource} med registrerade regler
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
             @Value("${cors.allowed-origins:http://localhost:5173,http://localhost:5174,http://localhost:5175,http://127.0.0.1:5173,http://127.0.0.1:5174,http://127.0.0.1:5175}") List<String> allowedOrigins) {
@@ -61,6 +78,11 @@ public class SecurityConfig {
         return source;
     }
 
+    /**
+     * Konfigurerar OpenAPI/Swagger 3-specifikationen och lägger till stöd för JWT Bearer-autentisering i API-dokumentationen.
+     *
+     * @return en anpassad {@link OpenAPI}-instans
+     */
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
@@ -78,6 +100,12 @@ public class SecurityConfig {
                                         .bearerFormat("JWT")));
     }
 
+    /**
+     * Konfigurerar JWT-autentiseringskonverteraren för att extrahera roller från 'roles'-claimet i JWT-tokenen
+     * och prefixa dem med 'ROLE_' för Spring Security.
+     *
+     * @return en konfigurerad {@link JwtAuthenticationConverter}
+     */
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();

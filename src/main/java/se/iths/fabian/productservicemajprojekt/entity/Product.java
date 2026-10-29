@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * JPA-entitet som representerar en produkt i webbshoppens databas.
+ * Innehåller information om namn, beskrivning, pris, lagersaldo, kategori och bild-URL.
+ */
 @Entity
 @Data
 @NoArgsConstructor
